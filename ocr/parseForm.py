@@ -111,6 +111,10 @@ def parseImage (img):
         d0connectedfn = lambda someline: __isConnected(line, someline)
         d1connections = filter(d0connectedfn, restlines)
 
+        ## Remove d1connections, they're unimportant for d2 tests and it cuts down comparisons.
+        for d1connection in d1connections:
+            restlines.remove(d1connection)
+
         ## Create a seq and applicator of curried fns of 1st connections and filter again
         d1connectedfns = map((lambda l1: 
                               (lambda l2: 
@@ -121,9 +125,6 @@ def parseImage (img):
                                              (nextd1curry(testline)) and testline), ## Ugly syntactic sugar for if d1curry(testline) push testline out
                                         d1connectedfns)))
 
-        ## Remove d1connections, they're unimportant for d2 tests and it cuts down comparisons.
-        for d1connection in d1connections:
-            restlines.remove(d1connection)
         d2connections = __flatten(map(applyd1connectedfns, restlines))
         d2connections = filter((lambda identity: identity), d2connections) ## This kills False returns on connections
 
