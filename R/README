@@ -1,0 +1,13 @@
+This is the first script I wrote when I was learning R about a year ago (therefore please excuse any naive code, and let me know where I can be more idiomatic).
+
+I devised a hypothesis that 4-coloured matrices (that is, where each node of a d*d matrix can be one of 4 colours, and there can exist no rectangles within the matrix in which the corners share the same colour) could be D&C'd by taking two valid four-coloured (d-1)*(d-1) matrices offset by one row and one column (assuming that their overlapping (d-2)*(d-2) elements are consistent) meaning that only two elements would need to be tested (ie. the two opposing corner elements) a total of only 8 tests on an already truncated set of valid matrix combinations.  In this sense the solution could be built from a set of smaller valid matrices (albeit at the expense of memory, since all valid solutions for d-1 must be analyzed for each valid combination).  4-colour matricies have been proven impossible at d19 and above, my goal is to find all valid solutions for d18 (note: to brute-force a d18 solution would consist of more combinations than there are atoms in the universe!).
+
+RECENT CHANGES:
+- Added support for multiple cores (this makes a huge difference)
+
+TODO:
+- Find a more efficient way to compare matrix overlap (something hash-like, perhaps a row and col CRC/checksum or a colour aggregate key; note: CRCs and counts should survive rotations -- see below)
+- Find a more efficient way to struct the elements, they're currently stored as doubles (ridiculous!!!) but only need to hold 2 bits of data.
+- Find a more efficient way to hold the d-1 valid set... this is probably best dumped into a trie (since there is so much data commonality), but consider affect on comparison cost.
+- The valid set currently contains rotations, consider removing them to save space (75%!) and instead find a fast way to test against rotations of valid matrices... this will require some thinking/benching to see if the space tradeoffs trump the extra computational expense.
+- Graph the relations (indicies, hash hamming distance, etc) between base matrices and valid children... there may be a pattern here which would cut down on comparisons.
