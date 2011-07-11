@@ -89,10 +89,12 @@ class ParseForm:
     def getFormPolys(self):
         return self.formrects
 
+    ## Test whether two points are equivalent in space (within a distance of 10px, due to inaccuracy of edge mapping)
     def __fuzzyEq (self, pt1x, pt1y, pt2x, pt2y):
         fuzz = 10
         return ((fabs(pt1x - pt2x) < fuzz) and (fabs(pt1y - pt2y) < fuzz))
 
+    ## Tan method that fails silently (since many tests are of parallel and overlapping lines)
     def __tan_ (self, opp, adj):
         try:
             result = tan((float)(opp) / adj)
@@ -113,7 +115,7 @@ class ParseForm:
         return (len1 > len2)
 
     ## Test a pair of lines to see if they overlap (this sometimes happens when the edgemap generates parallel
-    ## in place of a single line in areas of uncertainty -- ie. thick lines), within a fuzzyness of 5px
+    ## lines in place of a single line in areas of uncertainty -- ie. thick lines), within a fuzzyness of 5px
     def __isOverlapping (self, ((l1pt1x, l1pt1y), (l1pt2x, l1pt2y)), ((l2pt1x, l2pt1y), (l2pt2x, l2pt2y))):
         fuzz = 5
 
