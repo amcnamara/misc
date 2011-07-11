@@ -7,9 +7,10 @@ import operator
 from math import sin, cos, tan, sqrt, pow, pi, fabs
 
 class ParseForm:
+    '''Parse an image of a form for bounding boxes and lines which correspond to input fields.'''
     def __init__(self, img):
+        self.overlay = cv.CreateImage(cv.GetSize(img), 8, 3)
         edgemap = cv.CreateImage(cv.GetSize(img), 8, 1)
-        overlay = cv.CreateImage(cv.GetSize(img), 8, 3)
         formrects = []
         formlines = []
 
@@ -37,14 +38,13 @@ class ParseForm:
                 restlines.remove(d1connection)
 
             ## Create a seq and applicator of curried fns of 1st connections and filter again
-            d1connectedfns = map((lambda l1:
-                                      (lambda l2:
-                                           self.__isConnected(l1, l2))), 
-                                 d1connections)
             applyd1connectedfns = (lambda testline:
                                        (map((lambda nextd1curry:
                                                  (nextd1curry(testline)) and testline), ## Ugly syntactic sugar for if d1curry(testline) push testline out
-                                            d1connectedfns)))
+                                            map((lambda l1:
+                                                     (lambda l2:
+                                                          self.__isConnected(l1, l2))), 
+                                                d1connections))))
             
             d2connections = self.__flatten(map(applyd1connectedfns, restlines))
             d2connections = filter((lambda identity: identity), d2connections) ## This kills False returns on connections
@@ -59,7 +59,7 @@ class ParseForm:
                 try:
                     formlines.remove(opp)
                     formlines.remove(line)
-                except:
+                except ValueError:
                     continue ## Fail silently on remove line (not-there error), since its removed many times.  
                              ## TODO: Find a safer/quieter way to remove from a collection
         self.__uniquePolys(formrects)
@@ -67,13 +67,27 @@ class ParseForm:
         if sys.flags.debug:
             print "Polys:           " + str(formrects)
             print "Remaining lines: " + str(formlines)
-    
-        ## Draw detected polys and lines on the overlay image and save
-        for poly in formrects:
-            cv.FillConvexPoly(overlay, poly, cv.RGB(255,255,0))
-        for line in formlines:
-            cv.Line(overlay, line[0], line[1], cv.CV_RGB(255, 0, 0), 3, 8)
-        cv.SaveImage("overlay.png", overlay)
+
+        self.formlines = formlines
+        self.formrects = formrects
+
+    ## Methods to generate overlay images of bounding features
+    def generateLineOverlay(self, colour = cv.CV_RGB(255, 0, 0)):
+        for line in self.getFormLines():
+            cv.Line(self.overlay, line[0], line[1], colour, 3, 8)
+        cv.SaveImage("overlay.png", self.overlay)
+
+    def generatePolyOverlay(self, colour = cv.CV_RGB(255, 255, 0)):
+        for poly in self.getFormPolys():
+            cv.FillConvexPoly(self.overlay, poly, colour)
+        cv.SaveImage("overlay.png", self.overlay)
+
+    ## Accessor methods
+    def getFormLines(self):
+        return self.formlines
+
+    def getFormPolys(self):
+        return self.formrects
 
     def __fuzzyEq (self, pt1x, pt1y, pt2x, pt2y):
         fuzz = 10
@@ -85,7 +99,8 @@ class ParseForm:
         except ZeroDivisionError:
             result = 0
         return result
-        
+
+    ## Test a pair of lines, return true if first line arg is bigger than the second
     def __isLonger (self, ((l1pt1x, l1pt1y), (l1pt2x, l1pt2y)), ((l2pt1x, l2pt1y), (l2pt2x, l2pt2y))):
         dy1 = l1pt2y - l1pt1y
         dx1 = l1pt2x - l1pt1x
@@ -97,6 +112,8 @@ class ParseForm:
 
         return (len1 > len2)
 
+    ## Test a pair of lines to see if they overlap (this sometimes happens when the edgemap generates parallel
+    ## in place of a single line in areas of uncertainty -- ie. thick lines), within a fuzzyness of 5px
     def __isOverlapping (self, ((l1pt1x, l1pt1y), (l1pt2x, l1pt2y)), ((l2pt1x, l2pt1y), (l2pt2x, l2pt2y))):
         fuzz = 5
 
@@ -115,6 +132,7 @@ class ParseForm:
                 (fabs(anglex1 - anglex2) < fuzz) and
                 (fabs(angley1 - angley1) < fuzz))
 
+    ## Test a pair of lines for connectivity at any of their endpoints, within a fuzzyness of 10px
     def __isConnected (self, ((l1pt1x, l1pt1y), (l1pt2x, l1pt2y)), ((l2pt1x, l2pt1y), (l2pt2x, l2pt2y))):
         if ((l1pt1x == l2pt1x) and
             (l1pt1y == l2pt1y) and
@@ -128,6 +146,7 @@ class ParseForm:
                     self.__fuzzyEq(l1pt2x, l1pt2y, l2pt1x, l2pt1y) or
                     self.__fuzzyEq(l1pt2x, l1pt2y, l2pt2x, l2pt2y))
 
+    ## Sequence operations for filtering result sets
     def __flatten (self, seq):
         return reduce(list.__add__, (list(flattenthis or []) for flattenthis in seq))
 
@@ -137,6 +156,7 @@ class ParseForm:
     def __allTrue (self, seq):
         return reduce(operator.and_, seq)
 
+    ## Removes any duplicate polys (within a fuzzyness of 10px on their endpoints) within the buffer
     def __uniquePolys (self, buf):
         for poly in buf:
             restbuf = []
@@ -164,6 +184,9 @@ if __name__ == "__main__":
         except:
             print "Unable to open image file \'" + str(filename) + "\'"
             raise
-        ParseForm(img)
+        form = ParseForm(img)
+        ## Create overlay image with bounding lines and boxes only
+        form.generatePolyOverlay()
+        form.generateLineOverlay()
     else:
         print "Usage: python [-d] parseForm.py <image-filename>"
