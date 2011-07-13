@@ -11,17 +11,13 @@ class NodeNotFound(Exception):
         return repr(self.msg)
 
 class Node(object):
+    datum = None
+    next  = None
     def __init__(self, datum):
         self.datum = datum
         self.next = None
     def __str__(self):
         return repr(self.datum)
-    def getDatum(self):
-        return self.datum
-    def getNext(self):
-        return self.next
-    def setNext(self, next):
-        self.next = next
 
 class LList(object):
     head = None
@@ -35,13 +31,13 @@ class LList(object):
         if self.head == None:
             self.head = node
         if self.tail != None:
-            self.tail.setNext(node)
+            self.tail.next = node
         self.tail = node
         return self
     def __sub__(self, node):
-        prev = filter(lambda test: (test.getNext() == node), self)
+        prev = filter(lambda test: test.next == node, self)
         if prev: 
-            prev[0].setNext(node.getNext())
+            prev[0].next = node.next
         return self
     def __iter__(self):
         self.iternode = None
@@ -50,44 +46,38 @@ class LList(object):
     def next(self):
         if self.head == None:
             raise StopIteration
-        if self.iterfast: self.iterfast = self.iterfast.getNext()
-        if self.iterfast: self.iterfast = self.iterfast.getNext()
+        if self.iterfast: self.iterfast = self.iterfast.next
+        if self.iterfast: self.iterfast = self.iterfast.next
         if self.iterfast and self.iterfast == self.iternode:
-            raise CircularDependency("Multiple nodes point to: " + str(self.iterfast))
+            raise CircularDependency
         if self.iternode == None:
             self.iternode = self.head
             return self.iternode
-        if self.iternode.getNext() == None:
+        if self.iternode.next == None:
             raise StopIteration
         else:
-            self.iternode = self.iternode.getNext()
+            self.iternode = self.iternode.next
             return self.iternode
     def insert(self, datum, next = None):
+        node = Node(datum)
         prev = None
-        if next == self.head:
-            node = Node(datum)
-            node.setNext(self.head)
+        if not next or next == self.head:
+            next = self.head
             self.head = node
-            return self
-        elif next:
+        else:
             try:
-                prev = filter(lambda test: (test.getNext() == next), self)[0]
+                prev = filter(lambda test: test.next == next, self)[0]
             except IndexError:
                 raise NodeNotFound(next)
-        else:
-            prev = self.tail
-        node = Node(datum)
-        node.setNext(prev.getNext())
-        prev.setNext(node)
-        if self.tail == prev:
-            self.tail = node
+            prev.next = node
+        node.next = next
         return self
     def reverse(self):
-        if not self.head.getNext():
+        if not self.head.next:
             return self
         prev  = None
         pprev = None
-        if self.head.getNext() and self.head.getNext().getNext():
+        if self.head.next and self.head.next.next:
             for node in self:
                 if not prev:
                     prev = node
@@ -96,14 +86,14 @@ class LList(object):
                     pprev = prev
                     prev  = node
                     continue
-                prev.setNext(pprev)
+                prev.next = pprev
                 pprev, prev = prev, node
-        elif self.head.getNext():
+        elif self.head.next:
             prev  = self.tail
             pprev = self.head
-        prev.setNext(pprev)
+        prev.next = pprev
         self.head, self.tail = self.tail, self.head
-        self.tail.setNext(None)
+        self.tail.next = None
         return self
     def getNodes(self, datum):
-        return filter(lambda node: (node.getDatum() == datum), self)
+        return filter(lambda node: node.datum == datum, self)
