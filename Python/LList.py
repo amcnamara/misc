@@ -23,7 +23,7 @@ class Node(object):
         return repr(self.datum)
 
 class Endpoint(object):
-    '''This is to make LList copy-safe, since its operations are in place and head/tail pointers can be corrupted on shallow copy.'''
+    '''Storing head/tail pointers in objects ensure that LList is copy-safe, otherwise its head/tail pointers would be corrupted on shallow copy with in-place operations.'''
     node = None
     def __init__(self, point = None):
         self.node = point
@@ -38,11 +38,6 @@ class LList(object):
         self.tail = Endpoint()
     def __str__(self):
         return " -> ".join(map(lambda node: str(node), self))
-    def __getitem__(self, idx):
-        if type(idx) == type(slice):
-            pass
-        else:
-            pass
     def __add__(self, datum):
         node = Node(datum)
         if self.head.node == None:
@@ -67,8 +62,10 @@ class LList(object):
     def next(self):
         if self.head == None:
             raise StopIteration
+        ## On each iteration move the fast iterator ahead twice, ahead of the normal iterator
         if self.iterfast: self.iterfast = self.iterfast.next
         if self.iterfast: self.iterfast = self.iterfast.next
+        ## If the slow iterator ever catches the fast, there is a cycle
         if self.iterfast and self.iterfast == self.iternode:
             raise CircularDependency
         if self.iternode == None:
@@ -94,10 +91,13 @@ class LList(object):
         node.next = next
         return self
     def reverse(self):
+        ## Case: 0-1 elements in list
         if not self.head or not self.head.node or not self.head.node.next:
             return self
         prev  = None
         pprev = None
+        ## Case: >2 elements in list
+        ## Store the first two nodes, iterate through the nodes and assign pointers back to previously iterated nodes
         if self.head.node.next and self.head.node.next.next:
             for node in self:
                 if not prev:
@@ -109,9 +109,11 @@ class LList(object):
                     continue
                 prev.next = pprev
                 pprev, prev = prev, node
+        ## Case: 2 elements in list
         else:
             prev  = self.tail.node
             pprev = self.head.node
+        ## Clean up the remaining two pointers near the end of the list
         prev.next = pprev
         self.head.node, self.tail.node = self.tail.node, self.head.node
         self.tail.node.next = None
