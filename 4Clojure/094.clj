@@ -17,27 +17,26 @@
 ;;       test cases).  To complete the game mechanic change the s predicate to include edge cases, or
 ;;       tuple the element value with the neighbour-value collections from parse-neighbours.
 
-;; Golf score: 356 (minified)
+;; Golf score: 341 (minified)
 
 (fn game-of-life [board]
-  (letfn [(parse-neighbours [game]
-			    (for [y (range 0 (count game))
-				  x (range 0 (count (first game)))]
-			      (flatten 
-			       (map #(subvec (apply vector %) 
-					     (max 0 (- x 1)) 
-					     (min (count (first game)) (+ x 2)))
-				    (subvec game (max 0 (- y 1)) (min (count game) (+ y 2)))))))]
-    (map #(apply str %)
-	 (loop [r [] c (map #(let [s (if (= 9 (count %)) (= \# (nth % 4)))
-				   c (count (filter (fn [i] (= \# i)) %))]
-			       (if (nil? s)
-				 \ 
-				 (if (and s (or (> c 4) (< c 3)))
-				   \ 
-				   (if (or s (= c 3))
-				     \#
-				     \ )))) (parse-neighbours board))]
-	   (if (empty? c)
-	     r
-	     (recur (conj r (take (-> board first count) c)) (drop (-> board first count) c)))))))
+  (let [parse-neighbours #(for [y (range 0 (count board))
+                                x (range 0 (count (first board)))]
+                            (flatten 
+                             (map #(subvec (apply vector %) 
+                                           (max 0 (- x 1)) 
+                                           (min (count (first board)) (+ x 2)))
+                                  (subvec board (max 0 (- y 1)) (min (count board) (+ y 2)))))))]
+  (map #(apply str %)
+       (loop [r [] c (map #(let [s (if (= 9 (count %)) (= \# (nth % 4)))
+                                 c (count (filter (fn [i] (= \# i)) %))]
+                             (if (nil? s)
+                               \ 
+                               (if (and s (or (> c 4) (< c 3)))
+                                 \ 
+                                 (if (or s (= c 3))
+                                   \#
+                                   \ )))) (parse-neighbours))]
+         (if (empty? c)
+           r
+           (recur (conj r (take (-> board first count) c)) (drop (-> board first count) c)))))))
