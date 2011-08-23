@@ -17,8 +17,6 @@
 ;;       test cases).  To complete the game mechanic change the s predicate to include edge cases, or
 ;;       tuple the element value with the neighbour-value collections from parse-neighbours.
 
-;; Golf score: 341 (minified)
-
 (fn game-of-life [board]
   (let [parse-neighbours #(for [y (range 0 (count board))
                                 x (range 0 (count (first board)))]
@@ -40,3 +38,33 @@
          (if (empty? c)
            r
            (recur (conj r (take (-> board first count) c)) (drop (-> board first count) c)))))))
+
+
+;; Golf score: 339 (minified)
+(fn g [b]
+  (let [a apply
+        i count
+        j range
+        v subvec
+        n (-> b first i)
+        m (i b)]
+    (map #(a str %)
+         (loop [r [] c (map #(let [s (if (= 9 (i %)) (= \# (nth % 4)))
+                                   c (i (filter (fn [i] (= \# i)) %))]
+                               (if (nil? s)
+                                 \
+                                 (if (and s (or (> c 4) (< c 3)))
+                                   \
+                                   (if (or s (= c 3))
+                                     \#
+                                     \ ))))
+                            (for [y (j 0 m)
+                                  x (j 0 n)]
+                              (flatten
+                               (map #(v (a vector %)
+                                        (max 0 (- x 1))
+                                        (min n (+ x 2)))
+                                    (v b (max 0 (- y 1)) (min m (+ y 2)))))))]
+           (if (empty? c)
+             r
+             (recur (conj r (take n c)) (drop n c)))))))
