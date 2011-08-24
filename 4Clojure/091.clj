@@ -34,4 +34,4 @@
         true
         (if (= (s (n (m #(c % a) r))) (s r))
           false
-                    (recur (into r (n (m #(c % a) r)))))))))
+          (recur (into r (n (m #(c % a) r)))))))))
