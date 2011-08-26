@@ -40,7 +40,7 @@
            (recur (conj r (take (-> board first count) c)) (drop (-> board first count) c)))))))
 
 
-;; Golf score: 339 (minified)
+;; Golf score: 325 (minified)
 (fn g [b]
   (let [a apply
         i count
@@ -49,15 +49,13 @@
         n (-> b first i)
         m (i b)]
     (map #(a str %)
-         (loop [r [] c (map #(let [s (if (= 9 (i %)) (= \# (nth % 4)))
-                                   c (i (filter (fn [i] (= \# i)) %))]
-                               (if (nil? s)
-                                 \
-                                 (if (and s (or (> c 4) (< c 3)))
-                                   \
-                                   (if (or s (= c 3))
-                                     \#
-                                     \ ))))
+         (loop [r [] c (map #(let [s (and (= 9 (i %)) (= \# (nth % 4)))
+                                   c (i (filter (fn [d] (= \# d)) %))]
+                               (if (and s (or (> c 4) (< c 3)))
+                                 \ 
+                                 (if (or s (= c 3))
+                                   \#
+                                   \ ))))
                             (for [y (j 0 m)
                                   x (j 0 n)]
                               (flatten
