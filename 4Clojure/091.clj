@@ -20,18 +20,18 @@
           (recur (into result (nodes (map (fn [i] (connected i full-graph)) result)))))))))
 
 
-;; Golf score: 196 (minified)
+;; Golf score: 193 (minified)
 (fn [a]
   (let [s set
         m map
         c #(remove nil?
                    (m (fn [[i j]] (if (= % i) j
-                                      (if (= % j) i)))
+                                  (if (= % j) i)))
                       (seq %2)))
-        n #(flatten (seq %))]
+        n #(s (flatten (seq %)))]
     (loop [r [(first (n a))]]
-      (if (= (s (n a)) (s r))
+      (if (= (n a) (s r))
         true
-        (if (= (s (n (m #(c % a) r))) (s r))
+        (if (= (n (m #(c % a) r)) (s r))
           false
           (recur (into r (n (m #(c % a) r)))))))))
