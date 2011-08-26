@@ -102,6 +102,8 @@
 	FFhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEXGFRyb290gAEIERojLTI3O0FIT1xk
 	Zmh2e4aPl5qjtbi9AAAAAAAAAQEAAAAAAAAAGQAAAAAAAAAAAAAAAAAAAL8=
 	</data>
+	<key>CommandString</key>
+	<string>emacs</string>
 	<key>CursorBlink</key>
 	<true/>
 	<key>CursorColor</key>
@@ -114,11 +116,13 @@
 	</data>
 	<key>DisableANSIColor</key>
 	<false/>
+	<key>EscapeNonASCIICharacters</key>
+	<false/>
 	<key>Font</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QViRjbGFzc1ZOU05hbWVWTlNTaXplWE5TZkZs
-	YWdzgAOAAiNAKAAAAAAAABAQWENvbnNvbGFz0hMUFRZaJGNsYXNzbmFtZVgkY2xhc3Nl
+	YWdzgAOAAiNAJgAAAAAAABAQWENvbnNvbGFz0hMUFRZaJGNsYXNzbmFtZVgkY2xhc3Nl
 	c1ZOU0ZvbnSiFRdYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLRGhtUcm9vdIABCBEa
 	Iy0yNzxCS1JZYGlrbXZ4gYaRmqGkrb/CxwAAAAAAAAEBAAAAAAAAABwAAAAAAAAAAAAA
 	AAAAAADJ
@@ -131,6 +135,8 @@
 	<true/>
 	<key>ProfileCurrentVersion</key>
 	<real>2.02</real>
+	<key>RunCommandAsShell</key>
+	<false/>
 	<key>SelectionColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -152,7 +158,7 @@
 	<key>ShowWindowSettingsNameInTitle</key>
 	<false/>
 	<key>TerminalType</key>
-	<string>ansi</string>
+	<string>xterm</string>
 	<key>TextBoldColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS

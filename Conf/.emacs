@@ -6,20 +6,22 @@
 (add-to-list 'load-path "~/Workspace/bin/emacs/")
 ;; Contents:
 ;; - Package
-;; - ESS
-;; - Slime (inc. contrib)
-;; - Nyan mode
+;; - ESS (not currently active in this setup, see: 'Stats plugin' below)
+;; - Slime with contrib
 
-;; Kill the damned menu bar
+;; Kill the menu bar
 (menu-bar-mode 0)
 
-;; Make scrolling sexily granular
+;; Make scrolling granular
 (setq scroll-step 1)
 
+;; Kill scratch header
+(setq initial-scratch-message nil)
 
-;; -------- ;;
-;; PACKAGES ;;
-;; -------- ;;
+
+;; ---------- ;;
+;; EXTENSIONS ;;
+;; ---------- ;;
 
 ;; Load Marmelade package manager
 (load "package/lisp_package.el")
@@ -28,8 +30,8 @@
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
-;; Stats package
-(load "ess/site-lisp/ess-site.el")
+;; Stats plugin
+;(load "ess/site-lisp/ess-site.el")
 
 ;; Load and configure Slime (et contrib)
 (load "slime/slime.el")
@@ -48,8 +50,9 @@
 ;; BINDS ;;
 ;; ----- ;;
 
-;; Binds for Slime interaction
+;; Binds for scripts and plugins
 (global-set-key (kbd "<f5>") 'clojure-jack-in)
+(global-set-key (kbd "<f6>") 'term)
 
 ;; Binds for entering lispy text
 (global-set-key (kbd "M-a") "#")
@@ -87,3 +90,16 @@
 ;; Custom help messages to spew above bindings
 (global-set-key (kbd "C-M-t") (lambda () (interactive) (message "(meta) # / ( [ {   } ] ) = ? ^")))
 (global-set-key (kbd "C-M-n") (lambda () (interactive) (message "(ctrl) para: a/s  sexp: o/n  word: e/t  char: u/h")))
+
+
+;; ------- ;;
+;; STARTUP ;;
+;; ------- ;;
+
+;; Load dired Workspace on startup
+(setq initial-buffer-choice "~/Workspace")
+
+;; Kill Workspace buffer if file loaded from shell
+(defun no-initial-buffer ()
+  (setq initial-buffer-choice nil))
+(add-hook 'find-file-hook 'no-initial-buffer)
