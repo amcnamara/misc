@@ -65,6 +65,6 @@
                                         (max 0 (- x 1))
                                         (min n (+ x 2)))
                                     (v b (max 0 (- y 1)) (min m (+ y 2)))))))]
-           (if (empty? c)
+           (if (= [] c)
              r
              (recur (conj r (take n c)) (drop n c)))))))
