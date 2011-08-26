@@ -6,7 +6,7 @@
 ;;  - Each edge is undirected (can be traversed either direction). 
 
 (fn [full-graph]
-  (let [connected #(filter (complement nil?)                                                                                                                      
+  (let [connected #(remove nil?                                                                                                                      
                            (map (fn [[i j]]
                                   (if (= % i) j
                                   (if (= % j) i)))
@@ -20,11 +20,11 @@
           (recur (into result (nodes (map (fn [i] (connected i full-graph)) result)))))))))
 
 
-;; Golf score: 208 (minified)
+;; Golf score: 196 (minified)
 (fn [a]
   (let [s set
         m map
-        c #(filter (complement nil?)
+        c #(remove nil?
                    (m (fn [[i j]] (if (= % i) j
                                       (if (= % j) i)))
                       (seq %2)))
