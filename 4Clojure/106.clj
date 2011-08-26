@@ -20,16 +20,11 @@
 	     (+ 1 steps)))))
 
 
-;; Golf score: 104 (minified)
+;; Golf score: 97 (minified)
 (fn [s e]
   (loop [c [s] i 1]
     (if (some #{e} c)
       i
       (recur (flatten
-              (map #(if %
-                      (list (* 2 %)
-                            (+ 2 %)
-                            (if (even? %)
-                              (/ % 2))))
-                   c))
+               (map #(if % [(* 2 %) (+ 2 %) (if even? (/ % 2))]) c))
              (+ 1 i)))))
