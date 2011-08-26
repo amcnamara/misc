@@ -7,16 +7,15 @@
    (if (empty? c)
      r
      (let [j (conj i (first c))]
-       (if (= (inc (first c)) (first (rest c)))
-         (if (and (> (count j) (count r)) (> (count j) 1))
+       (if (and (> (count j) (count r)) (> (count j) 1))
+         (if (= (inc (first c)) (first (rest c)))
            (recur j (rest c) j)
-           (recur r (rest c) j))
-         (if (and (> (count j) (count r)) (> (count j) 1))
-           (recur j (rest c) [])
+           (recur j (rest c) []))
+         (if (= (inc (first c)) (first (rest c)))
+           (recur r (rest c) j)
            (recur r (rest c) []))))))
 
-;; Golf score: 200 (minified)
-
+;; Golf score: 195 (minified)
 #(loop [r [] c % i []]
    (if (empty? c)
      r
@@ -24,10 +23,10 @@
            n count
            s rest
            j (conj i (f c))]
-       (if (= (inc (f c)) (f (s c)))
-         (if (and (> (n j) (n r)) (> (n j) 1))
+       (if (and (> (n j) (n r)) (> (n j) 1))
+         (if (= (inc (f c)) (f (s c)))
            (recur j (s c) j)
-           (recur r (s c) j))
-         (if (and (> (n j) (n r)) (> (n j) 1))
-           (recur j (s c) [])
+           (recur j (s c) []))
+         (if (= (inc (f c)) (f (s c)))
+           (recur r (s c) j)
            (recur r (s c) []))))))
