@@ -15,6 +15,9 @@
 ;; Make scrolling granular
 (setq scroll-step 1)
 
+;; Don't create backups on edit
+(setq make-backup-files nil)
+
 ;; Kill scratch header
 (setq initial-scratch-message nil)
 
