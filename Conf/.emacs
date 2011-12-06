@@ -111,6 +111,7 @@
 (global-set-key (kbd "C-a") 'backward-paragraph)
 
 ;; Binds for editing
+(global-set-key (kbd "M-RET") 'dabbrev-expand) ;; TODO: consider hippie-expand
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 (global-set-key (kbd "M-m"  ) 'kill-region)
 (global-set-key (kbd "M-w"  ) 'kill-ring-save)
