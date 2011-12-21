@@ -19,6 +19,15 @@
         $('div#preview').hide();
         $('div#preview').html("<img class='preview' src='" + url + "'>").fadeIn("slow");
       }
+      jQuery(document).ready(function() {
+        $('div#carousel').mousemove(function(ev) {
+          var offsetY   = (ev.pageY - $('div#carousel').offset().top);
+          var weight    = offsetY / $('div#carousel').height();
+          var direction = (weight > 0.5) ? -1 : 1;
+          $('div#carousel_container').animate({marginTop: '+=' + (20 * direction) + 'px'}, "fast", "linear");
+          $('div#preview').html("<p>" + direction + ", " + weight + "</p>");
+        });
+      });
     </script>
   </head>
   <body>
