@@ -34,7 +34,6 @@
       var speed       = "fast";
 
       function fixBounds() {
-	  $('div#preview').html('' + scroll_lock + ", " + top_lock + ", " + bottom_lock + ", " + direction + ", " + speed);
         if ($('div#carousel_container').offset().top > 90) {
           scroll_lock = true;
           top_lock    = true;
@@ -61,10 +60,10 @@
           var weight  = offsetY / $('div#carousel').height();
 	  scroll_lock = false;
           direction   = (weight > 0.5) ? -1 : 1;
-          speed       = (weight < 0.15 || weight > 0.85) ? "fast" : "slow";
+          speed       = (weight < 0.15 || weight > 0.85) ? 100 : (weight < 0.25 || weight > 0.75) ? 200 : 500;
 	  if (top_lock    && (direction == -1)) {top_lock    = false;}
 	  if (bottom_lock && (direction ==  1)) {bottom_lock = false;}
-	  if ((weight < 0.35 || weight > 0.65) && (!scroll_lock)) {
+	  if (weight < 0.35 || weight > 0.65) {
 	    continueMoveCarousel($('div#carousel_container'));
           } else {
 	    $('div#carousel_container').stop(true);
