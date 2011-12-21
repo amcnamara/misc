@@ -1,7 +1,7 @@
 <html>
   <head>
     <style type="text/css">
-      div.arrow          {display: none; height: 48px; width: 48px; position: absolute; margin-left: -5px;}
+      div.arrow          {height: 48px; width: 48px; position: absolute; margin-left: -5px;}
       div#up             {margin-top: 185px; background: url(http://assets.geni.com/images/arrow-sprite.png) 0px 48px;}
       div#down           {margin-top: 231px; background: url(http://assets.geni.com/images/arrow-sprite.png) 48px 48px;}
       img.thumb          {float: left; height: 150px; width: 200px; overflow: hidden;}
@@ -19,15 +19,23 @@
         $('div#preview').hide();
         $('div#preview').html("<img class='preview' src='" + url + "'>").fadeIn("slow");
       }
-      jQuery(document).ready(function() {
+      function moveUp() {
+        $('div#carousel_container').animate({marginTop: '-=20px'}, "fast");
+      }
+      function moveDown() {
+        $('div#carousel_container').animate({marginTop: '+=20px'}, "fast");
+      }
+      /*jQuery(document).ready(function() {
         $('div#carousel').mousemove(function(ev) {
           var offsetY   = (ev.pageY - $('div#carousel').offset().top);
           var weight    = offsetY / $('div#carousel').height();
           var direction = (weight > 0.5) ? -1 : 1;
-          $('div#carousel_container').animate({marginTop: '+=' + (20 * direction) + 'px'}, "fast", "linear");
-          $('div#preview').html("<p>" + direction + ", " + weight + "</p>");
+          var speed     = (weight < 0.15  || weight > 0.85)  ? "fast" : "slow";
+	  if (weight < 0.35 || weight > 0.65) {
+	    $('div#carousel_container').animate({marginTop: '+=' + (20 * direction) + 'px'}, speed, "linear");
+          }
         });
-      });
+      });*/
     </script>
   </head>
   <body>
@@ -53,8 +61,8 @@
 	       src     = "http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_medium.jpg"
 	       onClick = "preview(this, 'http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_large.jpg')">
 	</div>
-	<div id="up"   class="arrow"></div>
-	<div id="down" class="arrow"></div>
+	<div id="up"   class="arrow" onClick="moveUp()"></div>
+	<div id="down" class="arrow" onClick="moveDown()"></div>
       </div>
       <div id="preview">
 	<center>
