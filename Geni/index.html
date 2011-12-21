@@ -9,7 +9,7 @@
       div#site_container {height: 480px; width: 841px; overflow: hidden; margin: 75px auto 0 auto; border: 1px solid #333366; border-radius: 9px;}
       div#preview        {float: left; height: 480px; width: 640px; overflow: hidden; border-left: 1px solid #336; background-color: #EAEAEA;}
       img#preview        {height: 480px; width: 640px;}
-      div#carousel       {padding: 14px 0px; float: left; height: 480px; width: 200px; overflow: hidden;}
+      div#carousel       {padding: 14px 0px; float: left; height: 480px; width: 200px; overflow: hidden; background-color: #DDDDDD;}
       p#instruction      {margin-top: 220px; font: normal normal normal 12px/20px 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; color: #7B7B7B;}
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -19,11 +19,18 @@
         $('div#preview').hide();
         $('div#preview').html("<img class='preview' src='" + url + "'>").fadeIn("slow");
       }
+      function fixBounds() {
+        if ($('div#carousel_container').offset().top > 90) {
+	  $('div#carousel_container').animate({marginTop: '0px'}, "fast");
+	} else if ($('div#carousel_container').offset().top < -370) {
+	  $('div#carousel_container').animate({marginTop: '-445px'}, "fast");
+        }
+      }
       function moveUp() {
-        $('div#carousel_container').animate({marginTop: '-=20px'}, "fast");
+	$('div#carousel_container').animate({marginTop: '+=20px'}, "fast", "linear", function() {fixBounds();});
       }
       function moveDown() {
-        $('div#carousel_container').animate({marginTop: '+=20px'}, "fast");
+	$('div#carousel_container').animate({marginTop: '-=20px'}, "fast", "linear", function() {fixBounds();});
       }
       /*jQuery(document).ready(function() {
         $('div#carousel').mousemove(function(ev) {
@@ -40,8 +47,8 @@
   </head>
   <body>
     <div id="site_container">
-      <div id="carousel" style="background-color: #DDDDDD;">
-	<div id="carousel_container">
+      <div id="carousel">
+	<div id="carousel_container" style="float: left;">
 	  <img class   = "thumb" 
 	       src     = "http://photos.geni.com/p13/91/f2/07/bb/5344483904b52481/img_7801_medium.jpg"     
 	       onClick = "preview(this, 'http://photos.geni.com/p13/91/f2/07/bb/5344483904b52481/img_7801_large.jpg')"/>
