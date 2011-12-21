@@ -1,24 +1,46 @@
 <html>
   <head>
     <style type="text/css">
-      div.arrow          {height: 48px; width: 48px; position: absolute; margin-left: -5px;}
+      div.arrow          {display: none; height: 48px; width: 48px; position: absolute; margin-left: -5px;}
       div#up             {margin-top: 185px; background: url(http://assets.geni.com/images/arrow-sprite.png) 0px 48px;}
       div#down           {margin-top: 231px; background: url(http://assets.geni.com/images/arrow-sprite.png) 48px 48px;}
       img.thumb          {float: left; height: 150px; width: 200px; overflow: hidden;}
       body               {background: url(http://www.dreamux.com/template/images/bg.jpg);}
       div#site_container {height: 480px; width: 841px; overflow: hidden; margin: 75px auto 0 auto; border: 1px solid #333366; border-radius: 9px;}
       div#preview        {float: left; height: 480px; width: 640px; overflow: hidden; border-left: 1px solid #333366;}
+      img#preview        {height: 480px; width: 640px;}
       div#carousel       {padding: 14px 0px; float: left; height: 480px; width: 200px; overflow: hidden;}
     </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript">
+      function preview(obj, url) {
+        $('div#preview').html("<img class='preview' src='" + url + "'>");
+      }
     </script>
   </head>
   <body>
     <div id="site_container">
       <div id="carousel" style="background-color: #DDDDDD;">
-	<img class="thumb" src="http://photos.geni.com/p13/91/f2/07/bb/5344483904b52481/img_7801_medium.jpg">
-	<img class="thumb" src="http://photos.geni.com/p13/8b/77/a3/9c/5344483904b52477/blackbeard4_medium.jpg">
-	<img class="thumb" src="http://photos.geni.com/p13/55/15/80/8c/5344483904b5247f/img_7803_medium.jpg">
+	<div id="carousel_container">
+	  <img class="thumb" 
+	       src="http://photos.geni.com/p13/91/f2/07/bb/5344483904b52481/img_7801_medium.jpg"     
+	       onClick="preview(this, 'http://photos.geni.com/p13/91/f2/07/bb/5344483904b52481/img_7801_large.jpg')"/>
+	  <img class="thumb" 
+	       src="http://photos.geni.com/p13/8b/77/a3/9c/5344483904b52477/blackbeard4_medium.jpg"  
+	       onClick="preview(this, 'http://photos.geni.com/p13/8b/77/a3/9c/5344483904b52477/blackbeard4_large.jpg')"/>
+	  <img class="thumb" 
+	       src="http://photos.geni.com/p13/55/15/80/8c/5344483904b5247f/img_7803_medium.jpg" 
+	       onClick="preview(this, 'http://photos.geni.com/p13/55/15/80/8c/5344483904b5247f/img_7803_large.jpg')"/>
+	  <img class="thumb"
+	       src="http://photos.geni.com/p13/07/de/9e/93/5344483904b5247c/uromastyx_medium.jpg"
+	       onClick="preview(this, 'http://photos.geni.com/p13/07/de/9e/93/5344483904b5247c/uromastyx_large.jpg')">
+	  <img class="thumb" 
+	       src="http://photos.geni.com/p13/87/c5/a7/01/5344483904b52475/waterdragon2_medium.jpg"
+	       onClick="preview(this, 'http://photos.geni.com/p13/87/c5/a7/01/5344483904b52475/waterdragon2_large.jpg')">
+	  <img class="thumb" 
+	       src="http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_medium.jpg"
+	       onClick="preview(this, 'http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_large.jpg')">
+	</div>
 	<div id="up"   class="arrow"></div>
 	<div id="down" class="arrow"></div>
       </div>
