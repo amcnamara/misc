@@ -1,7 +1,7 @@
 <html>
   <head>
     <style type="text/css">
-      div.arrow          {height: 48px; width: 48px; position: absolute; margin-left: -5px;}
+      div.arrow          {display: none; height: 48px; width: 48px; position: absolute; margin-left: -5px;}
       div#up             {margin-top: 185px; background: url(http://assets.geni.com/images/arrow-sprite.png) 0px 48px;}
       div#down           {margin-top: 231px; background: url(http://assets.geni.com/images/arrow-sprite.png) 48px 48px;}
       img.thumb          {float: left; height: 150px; width: 200px; overflow: hidden;}
@@ -19,35 +19,66 @@
         $('div#preview').hide();
         $('div#preview').html("<img class='preview' src='" + url + "'>").fadeIn("slow");
       }
+
+      //function moveUp() {
+      //  $('div#carousel_container').animate({marginTop: '+=20px'}, 100, "linear", function() {fixBounds();});
+      //}
+      //function moveDown() {
+      //  $('div#carousel_container').animate({marginTop: '-=20px'}, 100, "linear", function() {fixBounds();});
+      //}
+
+      var scroll_lock = true;
+      var top_lock    = true;
+      var bottom_lock = false;
+      var direction   = 1;
+      var speed       = "fast";
+
       function fixBounds() {
+	  $('div#preview').html('' + scroll_lock + ", " + top_lock + ", " + bottom_lock + ", " + direction + ", " + speed);
         if ($('div#carousel_container').offset().top > 90) {
+          scroll_lock = true;
+          top_lock    = true;
 	  $('div#carousel_container').animate({marginTop: '0px'}, 100);
-	} else if ($('div#carousel_container').offset().top < -370) {
+	} else if ($('div#carousel_container').offset().top < (530 - $('div#carousel_container').height())) {
+	  scroll_lock = true;
+          bottom_lock = true;
 	  $('div#carousel_container').animate({marginTop: '-445px'}, 100);
         }
       }
-      function moveUp() {
-	$('div#carousel_container').animate({marginTop: '+=20px'}, 100, "linear", function() {fixBounds();});
+      function continueMoveCarousel(obj) {
+	obj.stop(true);
+	fixBounds();
+	if (!(scroll_lock || (top_lock && (direction == '1')) || (bottom_lock && (direction == '-1')))) {
+          obj.animate({marginTop: '+=' + (20 * direction) + 'px'}, speed, "linear", function() {
+	    fixBounds();
+	    continueMoveCarousel(obj, direction, speed);
+	  });
+        }
       }
-      function moveDown() {
-	$('div#carousel_container').animate({marginTop: '-=20px'}, 100, "linear", function() {fixBounds();});
-      }
-      /*jQuery(document).ready(function() {
+      jQuery(document).ready(function() {
         $('div#carousel').mousemove(function(ev) {
-          var offsetY   = (ev.pageY - $('div#carousel').offset().top);
-          var weight    = offsetY / $('div#carousel').height();
-          var direction = (weight > 0.5) ? -1 : 1;
-          var speed     = (weight < 0.15  || weight > 0.85)  ? "fast" : "slow";
-	  if (weight < 0.35 || weight > 0.65) {
-	    $('div#carousel_container').animate({marginTop: '+=' + (20 * direction) + 'px'}, speed, "linear");
-          }
+          var offsetY = (ev.pageY - $('div#carousel').offset().top);
+          var weight  = offsetY / $('div#carousel').height();
+	  scroll_lock = false;
+          direction   = (weight > 0.5) ? -1 : 1;
+          speed       = (weight < 0.15 || weight > 0.85) ? "fast" : "slow";
+	  if (top_lock    && (direction == -1)) {top_lock    = false;}
+	  if (bottom_lock && (direction ==  1)) {bottom_lock = false;}
+	  if ((weight < 0.35 || weight > 0.65) && (!scroll_lock)) {
+	    continueMoveCarousel($('div#carousel_container'));
+          } else {
+	    $('div#carousel_container').stop(true);
+	  }
         });
-      });*/
+	$('div#carousel').mouseout(function(ev) {
+	  scroll_lock = true;
+        });
+      });
     </script>
   </head>
   <body>
     <div id="site_container">
-      <div id="carousel">
+      <div id="carousel">					  
 	<div id="carousel_container" style="float: left;">
 	  <img class   = "thumb" 
 	       src     = "http://photos.geni.com/p13/91/f2/07/bb/5344483904b52481/img_7801_medium.jpg"     
