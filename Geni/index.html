@@ -21,16 +21,16 @@
       }
       function fixBounds() {
         if ($('div#carousel_container').offset().top > 90) {
-	  $('div#carousel_container').animate({marginTop: '0px'}, "fast");
+	  $('div#carousel_container').animate({marginTop: '0px'}, 100);
 	} else if ($('div#carousel_container').offset().top < -370) {
-	  $('div#carousel_container').animate({marginTop: '-445px'}, "fast");
+	  $('div#carousel_container').animate({marginTop: '-445px'}, 100);
         }
       }
       function moveUp() {
-	$('div#carousel_container').animate({marginTop: '+=20px'}, "fast", "linear", function() {fixBounds();});
+	$('div#carousel_container').animate({marginTop: '+=20px'}, 100, "linear", function() {fixBounds();});
       }
       function moveDown() {
-	$('div#carousel_container').animate({marginTop: '-=20px'}, "fast", "linear", function() {fixBounds();});
+	$('div#carousel_container').animate({marginTop: '-=20px'}, 100, "linear", function() {fixBounds();});
       }
       /*jQuery(document).ready(function() {
         $('div#carousel').mousemove(function(ev) {
