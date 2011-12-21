@@ -35,13 +35,11 @@
 
       function fixBounds() {
         if ($('div#carousel_container').offset().top > 90) {
-          scroll_lock = true;
           top_lock    = true;
-	  $('div#carousel_container').animate({marginTop: '0px'}, 100);
+	  $('div#carousel_container').animate({marginTop: '0px'}, 200);
 	} else if ($('div#carousel_container').offset().top < (530 - $('div#carousel_container').height())) {
-	  scroll_lock = true;
           bottom_lock = true;
-	  $('div#carousel_container').animate({marginTop: '-445px'}, 100);
+	  $('div#carousel_container').animate({marginTop: '-' + ($('div#carousel_container').height() - 452) + 'px'}, 200);
         }
       }
       function continueMoveCarousel(obj) {
