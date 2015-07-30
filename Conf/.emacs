@@ -6,7 +6,7 @@
 ;(setq inferior-lips-program "/opt/local/bin/clj")
 
 ;; Extend path to local dump of emacs plugins and scripts
-(add-to-list 'load-path "~/Workspace/bin/emacs/")
+;;(add-to-list 'load-path "~/Workspace/bin/emacs/")
 ;; Contents:
 ;; - Package
 ;; - ESS (not currently active in this setup, see: 'Stats plugin' below)
@@ -18,12 +18,33 @@
 ;; Make scrolling granular
 (setq scroll-step 1)
 
-;; Don't create backups on edit
-(setq make-backup-files nil)
+;; Put backup # files in a different directory
+(setq backup-directory-alist `(("." . "~/.emacs_backups")))
 
 ;; Kill scratch header
 (setq initial-scratch-message nil)
 
+;; Open cjsx files in coffee-mode, until something better comes along
+(add-to-list 'auto-mode-alist '("\\.cjsx\\'" . coffee-mode))
+
+;; Coffee-mode options
+(setq whitespace-action '(auto-cleanup))
+(custom-set-variables '(coffee-tab-width 2))
+
+;; Start with whitespace mode on
+;;(global-whitespace-mode 1)
+
+;; make whitespace-mode use just basic coloring
+(setq whitespace-style (quote (spaces tabs newline space-mark tab-mark newline-mark)))
+
+;; make whitespace-mode use ¶ instead of $ for line-breaks
+(setq whitespace-display-mappings
+      ;; all numbers are Unicode codepoint in decimal. try (insert-char 182 ) to see it
+      '(
+	(space-mark 32 [183] [46])
+	(newline-mark 10 [9166 10])
+	(tab-mark 9 [9655 9] [92 9])
+	))
 
 ;; ---------- ;;
 ;; EXTENSIONS ;;
@@ -34,49 +55,49 @@
 ;;  - If term buffer exists in bg, bring it to fg on call
 ;;  - If no term buffer exists in bg, create new one
 ;;  - If term buffer has focus, create another term buffer on call
-(load "multi-term/multi-term.el")
-(require 'multi-term)
-(setq multi-term-program "/bin/bash")
+;;(load "multi-term/multi-term.el")
+;;(require 'multi-term)
+;;(setq multi-term-program "/bin/bash")
 
-(defun last-term-buffer (l)
-  "Return most recently used term buffer."
-  (when l
-    (if (eq 'term-mode (with-current-buffer (car l) major-mode))
-	(car l) (last-term-buffer (cdr l)))))
+;;(defun last-term-buffer (l)
+;;  "Return most recently used term buffer."
+;;  (when l
+;;    (if (eq 'term-mode (with-current-buffer (car l) major-mode))
+;;	(car l) (last-term-buffer (cdr l)))))
 
-(defun get-term ()
-  "Switch to the term buffer last used, or create a new one if
-    none exists, or if the current buffer is already a term."
-  (interactive)
-  (let ((b (last-term-buffer (buffer-list))))
-    (if (or (not b) (eq 'term-mode major-mode))
-	(multi-term)
-      (switch-to-buffer b))))
+;;(defun get-term ()
+;;  "Switch to the term buffer last used, or create a new one if
+;;    none exists, or if the current buffer is already a term."
+;;  (interactive)
+;;  (let ((b (last-term-buffer (buffer-list))))
+;;    (if (or (not b) (eq 'term-mode major-mode))
+;;	(multi-term)
+;;      (switch-to-buffer b))))
 
 ;; Load Marmelade package manager
-(load "package/lisp_package.el")
-(require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(package-initialize)
+;;(load "package/lisp_package.el")
+;;(require 'package)
+;;(add-to-list 'package-archives
+;;             '("marmalade" . "http://marmalade-repo.org/packages/"))
+;;(package-initialize)
 
 ;; Stats plugin
 ;(load "ess/site-lisp/ess-site.el")
 
-(load "word-count-mode/word-count.el")
-(require 'word-count)
+;;(load "word-count-mode/word-count.el")
+;;(require 'word-count)
 
 ;; Load and configure Slime (et contrib)
-(load "slime/slime.el")
-(load "slime/contrib/slime-banner.el")
-(load "slime/contrib/slime-repl.el")
-(require 'slime)
-(eval-after-load "slime"
-  '(progn
-     (require 'slime-banner)
-     (require 'slime-repl)
-     (slime-banner-init)
-     (slime-setup '(slime-repl))))
+;;(load "slime/slime.el")
+;;(load "slime/contrib/slime-banner.el")
+;;(load "slime/contrib/slime-repl.el")
+;;(require 'slime)
+;;(eval-after-load "slime"
+;;  '(progn
+;;     (require 'slime-banner)
+;;     (require 'slime-repl)
+;;     (slime-banner-init)
+;;     (slime-setup '(slime-repl))))
 
 
 ;; ----- ;;
