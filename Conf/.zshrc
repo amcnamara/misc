@@ -9,6 +9,9 @@ zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 # Match completions without case sensitivity
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
+# Stop warning me about rspec!
+alias bundle='nocorrect bundle'
+
 # Load prompt colors
 autoload -U colors
 colors
@@ -30,6 +33,36 @@ alias emacs="emacs -nw"
 
 # General shorthand and mis-typed stuff
 alias l="ls"
+alias g="grep"
 
 # Brew pernsonal token
-export HOMEBREW_GITHUB_API_TOKEN=3b05e8ee27818a5f605f7b61587c9098560f6616
+export HOMEBREW_GITHUB_API_TOKEN=REDACTED
+
+# RbEnv initialization
+export GEM_PATH=/Users/amcnamara/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0
+eval "$(rbenv init -)"
+
+# Tmuxinator configs
+export EDITOR="emacs"
+export SHELL="zsh"
+
+# SDEdit on Path
+export PATH=$PATH:~/SDEdit
+
+# ChefDK on Path
+export PATH=/usr/local/bin:$PATH
+
+# Brew binaries on Path
+export PATH="/usr/local/sbin:$PATH"
+
+# Terraform binaries on Path
+export PATH="/usr/local/terraform:$PATH"
+
+# Start NVM
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+
+# For vagrant helper scripts to find outreach sources
+export LOCAL_SRC_DIR=~/Workspace
+
+export CLASSPATH=~/.m2/
