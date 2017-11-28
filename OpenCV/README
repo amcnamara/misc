@@ -1,6 +1,0 @@
-Basic parsing of form elements from an image.  Produces an output image with an overlay of parsed elements.
-
-Usage:
-	- Install OpenCV
-	- run "python [-d] parseForm.py <image-filename>"
-	- debug flag will dump poly coordinates to stdout

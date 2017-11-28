@@ -1,0 +1,1 @@
+These files correspond to problems on the clojure koan website 4clojure.com, they've been obfuscated in order to reduce their size (which is a secondary objective for these problems). These examples may be out-of-date. This is in no way idiomatic clojure, and shouldn't really be used for anything.

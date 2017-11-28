@@ -1,0 +1,1 @@
+These are old experiments that I tried with Python years ago. This code is not idiomatic, and shouldn't really be used for anything.
